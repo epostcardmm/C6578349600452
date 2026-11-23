@@ -1,483 +1,449 @@
 <!DOCTYPE html>
-<html lang="my">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Be My Valentine 💜 | E-Postcard</title>
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Canvas Confetti CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Padauk:wght@400;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Story ✨</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* 🌟 Sky Blue Gradient Background 🌟 */
+            background: linear-gradient(135deg, #0284c7 0%, #38bdf8 50%, #bae6fd 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        
+        /* 🌟 3:4 Aspect Ratio Fixed Frame (Sky Blue Theme Card) 🌟 */
+        .container {
+            text-align: center;
+            background: #ffffff;
+            padding: 20px 15px;
+            border-radius: 36px;
+            box-shadow: 0 25px 50px rgba(2, 132, 199, 0.3);
+            border: 3px solid #0ea5e9;
+            
+            width: 320px;
+            height: 460px;
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            position: relative;
+        }
 
-  <style>
-    body {
-      font-family: 'Padauk', 'Outfit', sans-serif;
-      overflow-x: hidden;
-    }
+        .step {
+            display: none;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .step.active {
+            display: flex;
+        }
 
-    .handwriting {
-      font-family: 'Dancing Script', 'Padauk', cursive;
-    }
+        /* 🌟 Much Larger & Clear Headings 🌟 */
+        h2 {
+            color: #0369a1;
+            font-size: 19px;
+            margin: 0;
+            line-height: 1.4;
+            font-weight: 700;
+            height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-    /* Custom Image Background */
-    .custom-bg {
-      background-image: url('https://4kwallpapers.com/images/walls/thumbs_3t/25008.jpg');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      position: relative;
-    }
+        /* 🌟 Larger GIF Frame Size 🌟 */
+        .gif-container img {
+            width: 175px;
+            height: 175px;
+            object-fit: cover;
+            border-radius: 28px;
+            box-shadow: 0 10px 25px rgba(14, 165, 233, 0.25);
+            margin: auto 0;
+        }
 
-    /* Dark/Purple overlay for readability */
-    .custom-bg::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(50, 20, 80, 0.4);
-      z-index: 0;
-    }
+        /* 🌟 Fixed Button Group 🌟 */
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            height: 70px;
+            box-sizing: border-box;
+        }
+        
+        /* 🌟 Larger Buttons & Bigger Font Sizes 🌟 */
+        button {
+            height: 54px;
+            width: 130px;
+            font-size: 15px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.3s ease;
+            box-sizing: border-box;
+            padding: 0 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Main Button: Bright Sky Blue Gradient */
+        .btn-main {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            color: white;
+            box-shadow: 0 6px 0 #0369a1, 0 10px 20px rgba(14, 165, 233, 0.4);
+        }
+        .btn-main:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #0369a1, 0 4px 8px rgba(14, 165, 233, 0.4);
+        }
 
-    /* Floating glowing elements */
-    .bg-hearts {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
-    }
+        /* Sub Button: Royal Blue Gradient */
+        .btn-sub {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            box-shadow: 0 6px 0 #1e40af, 0 10px 20px rgba(59, 130, 246, 0.4);
+        }
+        .btn-sub:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #1e40af, 0 4px 8px rgba(59, 130, 246, 0.4);
+        }
 
-    .heart-particle {
-      position: absolute;
-      bottom: -10vh;
-      animation: floatUp linear infinite;
-      user-select: none;
-      filter: drop-shadow(0 0 8px rgba(216, 180, 254, 0.8));
-    }
+        /* 🌟 Running Button Style 🌟 */
+        .running-btn {
+            position: absolute !important;
+            transition: left 0.15s ease, top 0.15s ease !important;
+            z-index: 99;
+        }
 
-    @keyframes floatUp {
-      0% {
-        transform: translateY(0) rotate(0deg) scale(0.7);
-        opacity: 0.9;
-      }
-      50% {
-        opacity: 1;
-        filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.8));
-      }
-      100% {
-        transform: translateY(-115vh) rotate(360deg) scale(1.3);
-        opacity: 0;
-      }
-    }
+        #final-card {
+            background: #f0f9ff;
+            padding: 10px;
+            border-radius: 24px;
+            border: 2px dashed #0ea5e9;
+            width: 100%;
+            height: 335px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    /* Envelope Float Down Animation */
-    .animate-float-down {
-      animation: floatDownFromTop 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-    }
+        .youtube-container {
+            width: 100%;
+            height: 190px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
 
-    @keyframes floatDownFromTop {
-      0% {
-        top: -250px;
-        transform: translateX(-50%) rotate(-15deg);
-        opacity: 0;
-      }
-      40% {
-        transform: translateX(-45%) rotate(10deg);
-        opacity: 1;
-      }
-      70% {
-        transform: translateX(-52%) rotate(-5deg);
-      }
-      100% {
-        top: 32%;
-        transform: translateX(-50%) rotate(0deg);
-        opacity: 1;
-      }
-    }
+        .youtube-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
 
-    /* Gentle Floating Animation */
-    .animate-bounce-gentle {
-      animation: bounceGentle 1.4s infinite alternate ease-in-out;
-    }
+        /* 🌟 Floating No-Frame GIF 🌟 */
+        .floating-gif {
+            display: none;
+            position: absolute;
+            top: -100px;
+            width: 90px;
+            height: 90px;
+            cursor: pointer;
+            z-index: 100;
+            animation: floatDown 3s forwards ease-out;
+        }
 
-    @keyframes bounceGentle {
-      0% { transform: translateY(0) scale(1); }
-      100% { transform: translateY(-10px) scale(1.05); }
-    }
+        .floating-gif img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+        }
 
-    /* Notebook Lined Paper Texture for Letter Modal */
-    .paper-texture {
-      background: #faf5ff;
-      background-image: linear-gradient(to bottom, #e9d5ff 1px, transparent 1px);
-      background-size: 100% 28px;
-      box-shadow: 0 25px 50px rgba(126, 34, 206, 0.25);
-      border: 1px solid #e9d5ff;
-    }
+        @keyframes floatDown {
+            0% { top: -100px; transform: translateX(0) rotate(0deg); }
+            50% { transform: translateX(35px) rotate(15deg); }
+            100% { top: 150px; transform: translateX(-15px) rotate(-10deg); }
+        }
 
-    /* Purple Theme Button Styles */
-    .btn-yes-new {
-      background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);
-      box-shadow: 0 10px 25px -5px rgba(126, 34, 206, 0.5), 0 0 15px rgba(192, 132, 252, 0.4);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      transform-origin: center;
-    }
-    .btn-yes-new:hover {
-      background: linear-gradient(135deg, #9333ea 0%, #6b21a8 100%);
-      box-shadow: 0 15px 30px -5px rgba(126, 34, 206, 0.7), 0 0 25px rgba(192, 132, 252, 0.7);
-    }
+        /* 🌟 Floating Letter / Note Modal 🌟 */
+        .letter-modal {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(2, 132, 199, 0.5);
+            border-radius: 36px;
+            justify-content: center;
+            align-items: center;
+            z-index: 101;
+            backdrop-filter: blur(3px);
+        }
 
-    .btn-no-new {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(10px);
-      border: 1.5px solid rgba(192, 132, 252, 0.6);
-      box-shadow: 0 8px 20px rgba(168, 85, 247, 0.15);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      transform-origin: center;
-    }
-    .btn-no-new:hover {
-      background: rgba(243, 232, 255, 0.9);
-      border-color: rgba(168, 85, 247, 0.8);
-    }
+        .letter-paper {
+            background: #ffffff;
+            width: 88%;
+            padding: 24px 18px;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+            border: 2px solid #0ea5e9;
+            text-align: center;
+            position: relative;
+            animation: popIn 0.3s ease-out forwards;
+        }
 
-    /* Light Glow for Text Readability */
-    .text-glow-dark {
-      text-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
-    }
-  </style>
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .letter-paper h3 {
+            margin: 0 0 12px 0;
+            color: #0369a1;
+            font-size: 19px;
+        }
+
+        /* 🌟 Larger & Clear Letter Text 🌟 */
+        .letter-paper p {
+            color: #334155;
+            font-size: 14px;
+            line-height: 1.7;
+            margin: 0 0 18px 0;
+            text-align: justify;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: #0ea5e9;
+            color: white;
+            border: none;
+            padding: 9px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #0369a1;
+            width: auto;
+            height: auto;
+        }
+    </style>
 </head>
+<body>
 
-<body class="custom-bg min-h-screen flex items-center justify-center p-3 relative overflow-x-hidden selection:bg-purple-400 selection:text-white">
+<div class="container" id="main-container">
 
-  <!-- Background Floating Purple Heart & Sparkle Particles -->
-  <div id="heartsContainer" class="bg-hearts"></div>
-
-  <!-- Main Interactive Postcard Container -->
-  <main class="relative z-10 w-full max-w-xs sm:max-w-sm p-4 text-center my-auto bg-white/75 backdrop-blur-md rounded-2xl shadow-lg border border-purple-200/80">
-
-    <div id="contentBox" class="flex flex-col items-center justify-center min-h-[290px]">
-      
-      <!-- Compact GIF Display Container -->
-      <div class="relative w-40 h-40 sm:w-44 sm:h-44 mb-3 rounded-xl overflow-hidden shadow-sm border border-purple-200 bg-white/70">
-        <img id="gifImage" 
-             src="https://media.tenor.com/3qIAMwBVG8UAAAAi/finger-guns-dudu.gif" 
-             alt="Love Proposal Cute GIF" 
-             class="w-full h-full object-cover">
-      </div>
-
-      <!-- Myanmar Proposal Question Heading -->
-      <h1 id="questionText" class="text-xl sm:text-2xl font-black text-purple-950 mb-4 leading-snug min-h-[2.8rem] flex items-center justify-center px-2 text-glow-dark">
-        ပိစိလေးတောင်ပြန်မချစ်ချင်ဘူးလား?  💜
-      </h1>
-
-      <!-- Interactive Buttons -->
-      <div id="buttonGroup" class="flex flex-wrap items-center justify-center gap-3 w-full">
-        <!-- Yes Button -->
-        <button id="yesBtn" onclick="handleYesClick()" 
-                class="btn-yes-new text-white font-black py-2.5 px-7 rounded-xl text-base sm:text-lg flex items-center gap-2 cursor-pointer">
-          <span>Yes</span> 💜
-        </button>
-
-        <!-- No Button -->
-        <button id="noBtn" onclick="handleNoClick()" 
-                class="btn-no-new text-purple-900 font-extrabold py-2.5 px-6 rounded-xl text-sm sm:text-base flex items-center gap-1 cursor-pointer">
-          <span>No</span> 🥺
-        </button>
-      </div>
-
-      <!-- Stage Dots Indicator -->
-      <div class="mt-4 flex gap-1.5 justify-center items-center" id="dotsContainer">
-        <span class="dot w-6 h-2 rounded-full bg-purple-600 shadow-sm"></span>
-        <span class="dot w-2 h-2 rounded-full bg-purple-300/60"></span>
-        <span class="dot w-2 h-2 rounded-full bg-purple-300/60"></span>
-        <span class="dot w-2 h-2 rounded-full bg-purple-300/60"></span>
-        <span class="dot w-2 h-2 rounded-full bg-purple-300/60"></span>
-      </div>
-
-    </div>
-  </main>
-
-  <!-- Floating Envelope Container -->
-  <div id="floatingPostcard" 
-       onclick="openApologyLetter()" 
-       class="fixed left-1/2 -translate-x-1/2 z-40 hidden cursor-pointer flex flex-col items-center group">
-    
-    <!-- Transparent Animated Envelope Graphic -->
-    <div class="relative w-36 h-36 sm:w-44 sm:h-44 filter drop-shadow-[0_12px_20px_rgba(126,34,206,0.3)] transform group-hover:scale-105 transition-transform duration-300">
-      <img src="https://i.ibb.co/dsNwZcW9/13-Floral-Envelope-Clipart-Watercolor-Romantic-Envelope-Spring-Printable-High-Quality-JPEG-Junk-Jour.png" 
-           alt="Floating Envelope" 
-           class="w-full h-full object-contain">
+    <!-- 🌟 Floating Heart / Letter GIF 🌟 -->
+    <div id="floating-gif" class="floating-gif" onclick="openLetter()">
+        <img src="https://i.ibb.co/8DF0jfY8/no-bg-env.png" alt="Letter GIF">
     </div>
 
-    <!-- Animated Tap Badge -->
-    <div class="bg-white/95 backdrop-blur-sm text-purple-900 text-xs sm:text-sm font-black px-5 py-2 rounded-full shadow-xl -mt-3 animate-bounce-gentle border border-purple-300 flex items-center gap-1.5">
-      <i class="fa-solid fa-envelope-open-text text-purple-600"></i> Click to Open Letter ✨
+    <!-- 🌟 Letter / Note Modal 🌟 -->
+    <div id="letter-modal" class="letter-modal">
+        <div class="letter-paper">
+            <h3>💌 To My Special One</h3>
+            <p>
+                ဒီ E-postcard လေးကို ဖွင့်ကြည့်ပေးလို့ ကျေးဇူးပါနော်... ✨<br><br>
+                တို့နှစ်ယောက်ကြားမှာ အခက်အခဲတွေ ရှိခဲ့ရင်တောင်မှ အစကနေ ပြန်စပြီး လက်တွဲသွားချင်ပါသေးတယ်။<br>
+                အမြဲတမ်း ဂရုစိုက်ပေးမှာမို့လို့ ကိုယ့်အနားမှာပဲ ဆက်ရှိပေးပါနော်။ ❤️
+            </p>
+            <button class="close-btn" onclick="closeLetter()">Close✨</button>
+        </div>
     </div>
-  </div>
 
-  <!-- Love Letter Modal Overlay -->
-  <div id="letterModal" class="fixed inset-0 bg-purple-950/40 backdrop-blur-sm z-50 flex items-center justify-center p-3 opacity-0 pointer-events-none transition-opacity duration-300">
-    
-    <!-- Compact Paper Letter Container -->
-    <div id="paperLetter" class="paper-texture rounded-xl w-full max-w-xs sm:max-w-sm p-5 relative transform scale-90 transition-transform duration-300">
-      
-      <!-- Close Modal Button -->
-      <button onclick="closeApologyLetter()" class="absolute top-3 right-3 text-purple-800 hover:text-purple-950 text-lg font-bold w-7 h-7 rounded-full bg-purple-100 hover:bg-purple-200 flex items-center justify-center transition-colors shadow-sm">
-        &times;
-      </button>
-
-      <!-- Letter Header -->
-      <div class="text-purple-800 font-black text-lg sm:text-xl mb-3 pt-1 flex items-center gap-1.5">
-        <span>To my special someone...</span> 💜
-      </div>
-
-      <!-- Letter Body Content -->
-      <div class="text-purple-950 text-xs sm:text-sm leading-[28px] space-y-1 my-3 font-bold">
-        <p>မင်းကို ပျော်ရွှင်အောင်ထားနိုင်ဖို့၊ အခက်အခဲတွေရှိလာရင် </p>
-        <p>အနားမှာ အမြဲရှိနေပေးမယ့် ကိုယ့်ရဲ့ဘဝလက်တွဲဖော်၊ </p>
-        <P>ကိုယ့်ရဲ့ချစ်သူ ဖြစ်ပေးဖို့အတွက် ကိုယ်တောင်းဆိုခွင့်ရှိမလား။</P>
-        <p>ကိုယ့်ရဲ့လက်ကိုကိုင်ပြီး အတူတူရှေ့ဆက်ကြရအောင်နော်...</p>
-      </div>
-
-      <!-- Footer & Signature -->
-      <div class="mt-6 pt-2 text-right">
-        <p class="text-purple-600 text-xs font-bold">Forever & Always...</p>
-        <p class="text-purple-700 font-black text-base sm:text-lg handwriting mt-0.5">
-          With all my love 💜
-        </p>
-      </div>
-
-      <div class="mt-4 text-center">
-        <button onclick="handleFinalAcceptClick()" class="btn-yes-new text-white font-black py-2 px-5 rounded-lg shadow-md transition-all text-xs inline-flex items-center justify-center gap-1.5">
-          <span>I Said Yes</span> 💜
-        </button>
-      </div>
-
+    <div id="step1" class="step active">
+        <div class="gif-container">
+            <img src="https://media.tenor.com/nA5iSpAftHAAAAAi/bubu-dudu.gif">
+        </div>
+        <h2>ဟိတ်... ရည်းစားဟောင်းလေး<br>ပြန်မချစ်ကြည့်ချင်ဘူးလား?🥺</h2>
+        <div class="btn-group">
+            <button id="s1-b1" class="btn-main" onclick="sendChoice('Step 1', 'Yes🥰', noCounts.step1); nextStep(2)">Yes 🥰</button>
+            <button id="s1-b2" class="btn-sub" onclick="noCounts.step1++; shrinkAndGrow()">No😭</button>
+        </div>
     </div>
-  </div>
 
-  <script>
+    <div id="step2" class="step">
+        <div class="gif-container">
+            <img src="https://media.tenor.com/Lgr_6-nkvnUAAAAi/casal-dudu.gif">
+        </div>
+        <h2 id="step2-text">သတိမရဘူးလား?✨</h2>
+        <div class="btn-group">
+            <button id="s2-b1" class="btn-main" onclick="sendChoice('Step 2', 'Yes🌙', noCounts.step2); nextStep(3)">Yes🌙</button>
+            <button id="s2-b2" class="btn-sub" onclick="noCounts.step2++; complainMemory()">No🙄</button>
+        </div>
+    </div>
+
+    <div id="step3" class="step">
+        <div class="gif-container">
+            <img src="https://media.tenor.com/2Jl1X7xa6UYAAAAi/bubu-dudu-eyes.gif">
+        </div>
+        <h2>ပြန်ချစ်ကြမယ်လေနော်နော်..🧸</h2>
+        <div class="btn-group" id="s3-group">
+            <button id="s3-b1" class="btn-sub" onclick="noCounts.step3++; swapButtons()">No</button>
+            <button id="s3-b2" class="btn-main" onclick="sendChoice('Step 3', 'Yes💖', noCounts.step3); nextStep(4)">Yes💖</button>
+        </div>
+    </div>
+
+    <div id="step4" class="step">
+        <div class="gif-container">
+            <img src="https://media.tenor.com/mKr-KcMW9RcAAAAi/cute-bears.gif">
+        </div>
+        <h2 id="step4-text">အတည်ပြန်တွဲကြမယ်လေ<br>ပြန်လက်ခံပေးပါနော်?💗</h2>
+        <div class="btn-group">
+            <button class="btn-main" onclick="sendChoice('Step 4', 'Yes🚀', noCounts.step4); nextStep(5)">Yes🚀</button>
+            <button id="s4-b2" class="btn-sub" onmouseover="runAwayButton()" ontouchstart="runAwayButton()" onclick="runAwayButton()">No✋</button>
+        </div>
+    </div>
+
+    <!-- 🌟 Step 5: Epostcard For You Button & YouTube Video 🌟 -->
+    <div id="step5" class="step">
+        <div id="final-card">
+            <h2 style="color: #0369a1; font-size: 17px; height: auto; margin: 0;">We Are Back! 💖</h2>
+            <div class="youtube-container">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/DqA1pxk4yhQ?si=ueqJYWl-qaEs23bZ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>            </div>
+            <p style="color: #334155; font-size: 12px; font-weight: bold; margin: 0;">
+                အစကပြန်စခွင့်ပေးလို့ ကျေးဇူးပါ။ ချစ်တယ်နော်... 🌹
+            </p>
+        </div>
+        <button class="btn-main" style="width: 100%; height: 48px; margin-top: 5px; border-radius: 24px; font-size: 15px;" onclick="sendChoice('Final', 'Epostcard For You 💌'); triggerEpostcard()">💌 Epostcard For You</button>
+    </div>
+</div>
+
+<script>
     const FORMSPREE_URL = "https://formspree.io/f/xzerkvba";
 
-    // 5 Proposal Questions and Matching Cute GIFs
-    const proposalData = [
-      {
-        question: "တကယ် ပြန်မချစ်ဘူးလား",
-        gif: "https://media1.tenor.com/m/Eazcnx5O-bgAAAAC/dudu-dudu-cute.gif"
-      },
-      {
-        question: "မငြင်းပါနဲ့တော့.. 🥺",
-        gif: "https://media.tenor.com/vEvRDC60wpoAAAAi/bubu-dudu-sseeyall.gif"
-      },
-      {
-        question: "ချစ်ခွင့်လေးပေးပါတော့...💜",
-        gif: "https://media.tenor.com/PkvpJyo2rSQAAAAi/bubu-dudu-sseeyall.gif"
-      },
-      {
-        question: "မရက်ဆက်ပါနဲ့ကွာ ✨",
-        gif: "https://media.tenor.com/5PMGvTrximwAAAAi/bubu-dudu-sseeyall.gif"
-      },
-      {
-        question: "Please Say YES 😤💜",
-        gif: "https://media.tenor.com/8P9ITFRRStAAAAAi/bubu.gif"
-      }
-    ];
-
-    let currentIndex = 0;
-    let yesScale = 1;
-    let noScale = 1;
-    let noCount = 0;
-
-    function sendFormspreeData(data) {
-      if (!FORMSPREE_URL) return;
-      fetch(FORMSPREE_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify(data)
-      }).catch(err => console.log("Formspree Send Error:", err));
-    }
-
-    // Background Floating Purple Hearts Animation Generator
-    function createHearts() {
-      const heartsContainer = document.getElementById('heartsContainer');
-      const heartIcons = ['💜', '⭐', '🟣', '✨', '🔮', '💫', '💜'];
-
-      for (let i = 0; i < 10; i++) {
-        const heart = document.createElement('div');
-        heart.classList.add('heart-particle');
-        heart.innerText = heartIcons[Math.floor(Math.random() * heartIcons.length)];
-        heart.style.left = Math.random() * 100 + 'vw';
-        heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
-        heart.style.animationDelay = (Math.random() * 5) + 's';
-        heart.style.fontSize = (Math.random() * 1.2 + 1.0) + 'rem';
-        heartsContainer.appendChild(heart);
-      }
-    }
-
-    // Handle "No" Button Click
-    function handleNoClick() {
-      noCount++;
-      currentIndex = (currentIndex + 1) % proposalData.length;
-
-      const gifImage = document.getElementById('gifImage');
-      const questionText = document.getElementById('questionText');
-      const yesBtn = document.getElementById('yesBtn');
-      const noBtn = document.getElementById('noBtn');
-
-      gifImage.src = proposalData[currentIndex].gif;
-      questionText.innerText = proposalData[currentIndex].question;
-
-      yesScale += 0.25;
-      yesBtn.style.transform = `scale(${yesScale})`;
-
-      noScale = Math.max(0.3, noScale - 0.12);
-      noBtn.style.transform = `scale(${noScale})`;
-
-      if (noScale <= 0.3) {
-        noBtn.style.opacity = '0.6';
-      }
-
-      updateDots();
-    }
-
-    // Update Stage Dots Indicator
-    function updateDots() {
-      const dots = document.querySelectorAll('.dot');
-      dots.forEach((dot, idx) => {
-        if (idx === currentIndex) {
-          dot.className = 'dot w-6 h-2 rounded-full bg-purple-600 shadow-sm';
-        } else {
-          dot.className = 'dot w-2 h-2 rounded-full bg-purple-300/60';
-        }
-      });
-    }
-
-    // Handle "Yes" Button Click (Shows Success view with Love Letter button)
-    function handleYesClick() {
-      sendFormspreeData({
-        event: "Love Accepted (Yes Clicked)",
-        message: "Yes ခလုတ်ကို နှိပ်ပြီး ချစ်သူအဖြစ်ပြန်လက်ခံလိုက်ပါပြီ!",
-        totalNoClicks: noCount,
-        time: new Date().toLocaleString()
-      });
-
-      const contentBox = document.getElementById('contentBox');
-
-      // Dynamic Confetti Burst with Purple/Violet Theme
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ['#a855f7', '#c084fc', '#e9d5ff', '#9333ea', '#7e22ce', '#3b82f6']
-      });
-
-      setTimeout(() => {
-        confetti({
-          particleCount: 50,
-          angle: 60,
-          spread: 50,
-          origin: { x: 0 },
-          colors: ['#a855f7', '#c084fc', '#e9d5ff']
-        });
-        confetti({
-          particleCount: 50,
-          angle: 120,
-          spread: 50,
-          origin: { x: 1 },
-          colors: ['#a855f7', '#c084fc', '#e9d5ff']
-        });
-      }, 250);
-
-      // Celebration Card Content
-      contentBox.innerHTML = `
-        <div class="flex flex-col items-center">
-          <div class="relative w-40 h-40 sm:w-44 sm:h-44 mb-3 rounded-xl overflow-hidden shadow-sm border border-purple-200 bg-white/60">
-            <img src="https://media.tenor.com/PLQ-msOeeLUAAAAi/dudu-on-top-bubu-hearts.gif" 
-                 alt="Happy Celebration GIF" 
-                 class="w-full h-full object-cover">
-          </div>
-
-          <h2 class="text-xl sm:text-2xl font-black text-purple-950 mb-1 leading-snug text-glow-dark">
-            Yayyy! အပိုင်သိမ်းလိုက်ပြီနော်! 🥰💜
-          </h2>
-
-          <p class="text-sm sm:text-base text-purple-800 font-black mb-4 text-glow-dark">
-            များကြီးချစ်ပေးမယ် ‌ရော့..အာဘွား.. ✨
-          </p>
-
-          <!-- Love Letter Trigger Button -->
-          <button onclick="triggerFloatingPostcard()" 
-                  class="btn-yes-new text-white font-black py-2 px-5 rounded-lg shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 text-xs sm:text-sm inline-flex items-center gap-1.5 cursor-pointer animate-bounce">
-            <i class="fa-solid fa-paper-plane text-xs text-white"></i> Love Letter for you
-          </button>
-        </div>
-      `;
-    }
-
-    // Trigger Envelope Float Down Sequence when Love Letter button is clicked
-    function triggerFloatingPostcard() {
-      const floatingEnv = document.getElementById('floatingPostcard');
-      floatingEnv.classList.remove('hidden');
-      floatingEnv.classList.add('animate-float-down');
-
-      confetti({
-        particleCount: 50,
-        spread: 60,
-        origin: { y: 0.4 },
-        colors: ['#a855f7', '#c084fc', '#e9d5ff']
-      });
-    }
-
-    // Open Paper Modal Letter when Floating Envelope is clicked
-    function openApologyLetter() {
-      const modal = document.getElementById('letterModal');
-      const paper = document.getElementById('paperLetter');
-
-      modal.classList.remove('opacity-0', 'pointer-events-none');
-      paper.classList.remove('scale-90');
-      paper.classList.add('scale-100');
-
-      confetti({
-        particleCount: 70,
-        spread: 70,
-        origin: { y: 0.5 },
-        colors: ['#a855f7', '#c084fc', '#e9d5ff', '#9333ea']
-      });
-    }
-
-    // Close Paper Modal Letter
-    function closeApologyLetter() {
-      const modal = document.getElementById('letterModal');
-      const paper = document.getElementById('paperLetter');
-
-      paper.classList.remove('scale-100');
-      paper.classList.add('scale-90');
-      modal.classList.add('opacity-0', 'pointer-events-none');
-    }
-
-    // Handle Final Acceptance Button Click in Letter Modal
-    function handleFinalAcceptClick() {
-      sendFormspreeData({
-        event: "Final Acceptance Confirmed",
-        message: "'I Said Yes' ဆိုတဲ့ ခလုတ်ကို နှိပ်လိုက်ပါပြီ!",
-        time: new Date().toLocaleString()
-      });
-
-      closeApologyLetter();
-    }
-
-    // Initialize particle effects on page load
-    window.onload = function() {
-      createHearts();
+    let noCounts = {
+        step1: 0,
+        step2: 0,
+        step3: 0,
+        step4: 0
     };
-  </script>
+
+    function sendChoice(stepName, choiceText, noCount = null) {
+        let payload = {
+            step: stepName,
+            response: choiceText,
+            timestamp: new Date().toLocaleString()
+        };
+
+        if (noCount !== null) {
+            payload.noClicksBeforeYes = noCount;
+        }
+
+        fetch(FORMSPREE_URL, {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        }).then(response => {
+            if (response.ok) {
+                console.log("Response sent to Gmail successfully!");
+            }
+        }).catch(error => {
+            console.error("Error sending response:", error);
+        });
+    }
+
+    let b1Scale = 1;
+    let b2Scale = 1;
+    let isSwapped = false;
+
+    function nextStep(stepNumber) {
+        document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+        document.getElementById('step' + stepNumber).classList.add('active');
+    }
+
+    function triggerEpostcard() {
+        const gif = document.getElementById('floating-gif');
+        gif.style.display = 'block';
+        gif.style.animation = 'none';
+        gif.offsetHeight; 
+        gif.style.animation = 'floatDown 3s forwards ease-out';
+    }
+
+    function openLetter() {
+        sendChoice('Epostcard', 'Postcard လေး ဖွင့်ကြည့်ပြီးပါပြီ 💌');
+        document.getElementById('letter-modal').style.display = 'flex';
+    }
+
+    function closeLetter() {
+        document.getElementById('letter-modal').style.display = 'none';
+    }
+
+    function shrinkAndGrow() {
+        if(b1Scale < 1.4) b1Scale += 0.1;
+        if(b2Scale > 0.5) b2Scale -= 0.1;
+        
+        const b1 = document.getElementById('s1-b1');
+        const b2 = document.getElementById('s1-b2');
+        b1.style.transform = `scale(${b1Scale})`;
+        b2.style.transform = `scale(${b2Scale})`;
+        if (b2Scale <= 0.5) {
+            b2.style.opacity = '0';
+            b2.style.pointerEvents = 'none';
+        }
+    }
+
+    function complainMemory() {
+        document.getElementById('step2-text').innerHTML = "တကယ်တော့<br>သတိရနေတာမလား 🥺";
+        const b2 = document.getElementById('s2-b2');
+        b2.style.opacity = '0';
+        b2.style.pointerEvents = 'none';
+    }
+
+    function swapButtons() {
+        const group = document.getElementById('s3-group');
+        const b1 = document.getElementById('s3-b1');
+        const b2 = document.getElementById('s3-b2');
+        
+        if (!isSwapped) {
+            group.insertBefore(b2, b1);
+            isSwapped = true;
+        } else {
+            group.insertBefore(b1, b2);
+            isSwapped = false;
+        }
+    }
+
+    function runAwayButton() {
+        noCounts.step4++;
+        const btn = document.getElementById('s4-b2');
+        const container = document.getElementById('main-container');
+        
+        if (!btn.classList.contains('running-btn')) {
+            btn.classList.add('running-btn');
+        }
+        
+        const maxX = container.clientWidth - btn.offsetWidth - 15; 
+        const maxY = container.clientHeight - btn.offsetHeight - 15;
+        
+        const randomX = Math.floor(Math.random() * maxX) + 10;
+        const randomY = Math.floor(Math.random() * maxY) + 10;
+        
+        btn.style.left = randomX + 'px';
+        btn.style.top = randomY + 'px';
+    }
+</script>
+
 </body>
 </html>
